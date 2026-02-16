@@ -1,0 +1,1203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Design Style Showcase</title>
+    <meta
+      name="description"
+      content="A bold, modern showcase of six UI design styles: Glassmorphism, Skeuomorphism, Neobrutalism, Claymorphism, Minimalism, and Liquid Glass."
+    />
+    <style>
+      /* ------------------------------
+         Base + layout
+      ------------------------------ */
+      :root {
+        --maxw: 1100px;
+        --pad: clamp(18px, 3vw, 34px);
+        --radius: 26px;
+        --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.25);
+        --shadow-md: 0 18px 50px rgba(0, 0, 0, 0.18);
+        --shadow-sm: 0 10px 25px rgba(0, 0, 0, 0.12);
+        --outline: rgba(255, 255, 255, 0.16);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter,
+          Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        background: #0b0b10;
+        overflow-x: hidden;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* Sticky mini-nav */
+      header {
+        position: fixed;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 50;
+        width: min(var(--maxw), calc(100% - 28px));
+        pointer-events: none;
+      }
+      .nav {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        background: rgba(20, 20, 28, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        font-size: 13px;
+        padding-left: 8px;
+        white-space: nowrap;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #7c3aed, #22d3ee);
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.18);
+      }
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      .pill {
+        font-size: 12px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.06);
+        transition: transform 0.25s var(--ease), background 0.25s var(--ease),
+          border-color 0.25s var(--ease);
+      }
+      .pill:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Fullscreen sections */
+      section {
+        min-height: 100svh;
+        display: grid;
+        align-items: center;
+        position: relative;
+        isolation: isolate;
+        padding: calc(90px + var(--pad)) var(--pad) var(--pad);
+      }
+      .wrap {
+        width: min(var(--maxw), 100%);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: clamp(18px, 4vw, 46px);
+        align-items: center;
+      }
+      @media (max-width: 900px) {
+        .wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .kicker {
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 12px;
+      }
+      h1,
+      h2 {
+        margin: 0 0 12px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: clamp(34px, 4.6vw, 62px);
+      }
+      p {
+        margin: 0 0 22px;
+        color: var(--muted);
+        font-size: clamp(15px, 1.25vw, 18px);
+        line-height: 1.6;
+        max-width: 60ch;
+      }
+
+      /* Unified hero-card layout */
+      .hero {
+        border-radius: var(--radius);
+        padding: clamp(18px, 2.6vw, 28px);
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        transform: translateY(8px);
+        opacity: 0;
+        animation: enter 0.85s var(--ease) forwards;
+        animation-delay: 0.08s;
+      }
+      .hero .toprow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .chip {
+        font-size: 12px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.86);
+      }
+      .mini {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .mini > div {
+        border-radius: 18px;
+        padding: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.06);
+        min-height: 88px;
+        transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease),
+          background 0.35s var(--ease);
+      }
+      .mini > div:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-md);
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .mini strong {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 8px;
+      }
+      .mini span {
+        color: rgba(255, 255, 255, 0.88);
+        font-weight: 650;
+        font-size: 16px;
+      }
+
+      .ctaRow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+
+      /* Buttons (base) */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.92);
+        font-weight: 750;
+        letter-spacing: 0.01em;
+        transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease),
+          background 0.25s var(--ease), border-color 0.25s var(--ease);
+        user-select: none;
+        will-change: transform;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.24);
+      }
+      .btn:active {
+        transform: translateY(0px) scale(0.99);
+      }
+      .btn .arrow {
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(-45deg);
+        margin-top: 1px;
+      }
+
+      /* Entrance animation */
+      @keyframes enter {
+        to {
+          transform: translateY(0px);
+          opacity: 1;
+        }
+      }
+
+      /* Decorative background blobs */
+      .bg {
+        position: absolute;
+        inset: -20%;
+        z-index: -2;
+        filter: blur(30px);
+        opacity: 0.85;
+        transform: translateZ(0);
+      }
+      .grain {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.22;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+        mix-blend-mode: overlay;
+      }
+
+      /* Scroll hint */
+      .hint {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.78);
+        animation: bob 1.6s var(--ease) infinite;
+      }
+      .mouse {
+        width: 14px;
+        height: 18px;
+        border-radius: 999px;
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        position: relative;
+      }
+      .mouse::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 3px;
+        width: 2px;
+        height: 4px;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.75);
+        border-radius: 2px;
+        animation: wheel 1.3s var(--ease) infinite;
+      }
+      @keyframes wheel {
+        0% {
+          transform: translateX(-50%) translateY(0);
+          opacity: 1;
+        }
+        70% {
+          transform: translateX(-50%) translateY(6px);
+          opacity: 0.2;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(-6px);
+        }
+      }
+
+      /* ------------------------------
+         1) Glassmorphism
+      ------------------------------ */
+      .glass {
+        background: radial-gradient(1200px 600px at 15% 25%, #67e8f9 0%, transparent 55%),
+          radial-gradient(900px 500px at 90% 30%, #a78bfa 0%, transparent 55%),
+          radial-gradient(900px 600px at 50% 95%, #fb7185 0%, transparent 60%),
+          linear-gradient(180deg, #090a12 0%, #0b0b10 100%);
+      }
+      .glass .hero {
+        background: rgba(255, 255, 255, 0.11);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .glass .hero::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        background: linear-gradient(
+          135deg,
+          rgba(103, 232, 249, 0.55),
+          rgba(167, 139, 250, 0.45),
+          rgba(251, 113, 133, 0.35)
+        );
+        opacity: 0.35;
+        z-index: -1;
+        filter: blur(12px);
+      }
+      .glass .btn {
+        background: linear-gradient(135deg, rgba(103, 232, 249, 0.25), rgba(167, 139, 250, 0.2));
+        border-color: rgba(255, 255, 255, 0.26);
+      }
+      .glass .btn:hover {
+        background: linear-gradient(135deg, rgba(103, 232, 249, 0.35), rgba(167, 139, 250, 0.3));
+      }
+      .glass .chip {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      /* ------------------------------
+         2) Skeuomorphism
+      ------------------------------ */
+      .skeuo {
+        color: rgba(16, 16, 16, 0.92);
+        --text: rgba(16, 16, 16, 0.92);
+        --muted: rgba(16, 16, 16, 0.62);
+        background: radial-gradient(1200px 700px at 25% 25%, rgba(255, 210, 128, 0.7) 0%, transparent 60%),
+          radial-gradient(900px 600px at 85% 55%, rgba(122, 214, 255, 0.7) 0%, transparent 60%),
+          linear-gradient(180deg, #f7f2e7 0%, #efe6d6 100%);
+      }
+      .skeuo .nav {
+        background: rgba(255, 255, 255, 0.65);
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+      .skeuo .pill {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.08);
+      }
+      .skeuo .pill:hover {
+        background: rgba(0, 0, 0, 0.08);
+        border-color: rgba(0, 0, 0, 0.12);
+      }
+      .skeuo .hero {
+        background: linear-gradient(180deg, #ffffff 0%, #f2eadf 100%);
+        border: 1px solid rgba(0, 0, 0, 0.14);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.18);
+      }
+      .skeuo .hero::before {
+        content: "";
+        position: absolute;
+        inset: 10px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+        pointer-events: none;
+      }
+      .skeuo .toprow {
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      .skeuo .chip,
+      .skeuo .mini > div {
+        border-color: rgba(0, 0, 0, 0.12);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(0, 0, 0, 0.03));
+      }
+      .skeuo .mini > div:hover {
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+        transform: translateY(-7px);
+      }
+      .skeuo .btn {
+        color: rgba(16, 16, 16, 0.92);
+        border-color: rgba(0, 0, 0, 0.14);
+        background: linear-gradient(180deg, #ffffff 0%, #eadfcf 100%);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+      .skeuo .btn:hover {
+        background: linear-gradient(180deg, #ffffff 0%, #e2d4bf 100%);
+      }
+
+      /* Faux hardware knob */
+      .knob {
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, #ffffff 0%, #e5d7c3 35%, #c8b396 100%);
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        box-shadow: inset 0 8px 10px rgba(255, 255, 255, 0.9), inset 0 -10px 16px rgba(0, 0, 0, 0.15),
+          0 16px 26px rgba(0, 0, 0, 0.2);
+        position: relative;
+        transition: transform 0.35s var(--ease);
+      }
+      .skeuo .hero:hover .knob {
+        transform: rotate(18deg);
+      }
+      .knob::after {
+        content: "";
+        position: absolute;
+        inset: 11px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.05));
+        border: 1px solid rgba(0, 0, 0, 0.12);
+      }
+
+      /* ------------------------------
+         3) Neobrutalism
+      ------------------------------ */
+      .brutal {
+        background: linear-gradient(135deg, #ff4d6d 0%, #ffd166 40%, #00bbf9 100%);
+        color: #111;
+        --text: #111;
+        --muted: rgba(17, 17, 17, 0.72);
+      }
+      .brutal .nav {
+        background: rgba(255, 255, 255, 0.85);
+        border-color: rgba(0, 0, 0, 0.18);
+      }
+      .brutal .pill {
+        background: #fff;
+        border-color: #111;
+      }
+      .brutal .pill:hover {
+        transform: translateY(-2px) rotate(-1deg);
+      }
+      .brutal .hero {
+        background: #ffffff;
+        border: 4px solid #111;
+        border-radius: 20px;
+        box-shadow: 10px 10px 0 #111;
+      }
+      .brutal .hero:hover {
+        transform: translateY(-2px) rotate(-0.35deg);
+      }
+      .brutal .chip,
+      .brutal .mini > div {
+        border: 3px solid #111;
+        background: #fef08a;
+        box-shadow: 6px 6px 0 #111;
+        border-radius: 18px;
+      }
+      .brutal .mini > div:nth-child(2) {
+        background: #a7f3d0;
+      }
+      .brutal .mini > div:nth-child(3) {
+        background: #bfdbfe;
+      }
+      .brutal .mini > div:nth-child(4) {
+        background: #fbcfe8;
+      }
+      .brutal .mini > div:hover {
+        transform: translateY(-8px) rotate(0.4deg);
+        box-shadow: 10px 10px 0 #111;
+      }
+      .brutal .btn {
+        background: #111;
+        color: #fff;
+        border: 3px solid #111;
+        box-shadow: 6px 6px 0 rgba(17, 17, 17, 1);
+        border-radius: 16px;
+      }
+      .brutal .btn:hover {
+        transform: translateY(-3px) rotate(-0.5deg);
+        box-shadow: 10px 10px 0 rgba(17, 17, 17, 1);
+      }
+
+      /* ------------------------------
+         4) Claymorphism
+      ------------------------------ */
+      .clay {
+        background: radial-gradient(1200px 700px at 25% 20%, rgba(168, 85, 247, 0.55) 0%, transparent 55%),
+          radial-gradient(1000px 700px at 80% 60%, rgba(34, 211, 238, 0.55) 0%, transparent 60%),
+          linear-gradient(180deg, #0b0b10 0%, #0b0b10 100%);
+      }
+      .clay .hero {
+        background: rgba(20, 20, 30, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 26px 60px rgba(0, 0, 0, 0.38);
+      }
+      .clay .hero::before {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border-radius: 20px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+        pointer-events: none;
+      }
+      .clay .chip {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .clay .mini > div {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow: inset 10px 10px 18px rgba(0, 0, 0, 0.35),
+          inset -12px -12px 18px rgba(255, 255, 255, 0.05);
+      }
+      .clay .mini > div:hover {
+        transform: translateY(-7px) scale(1.01);
+        box-shadow: inset 12px 12px 22px rgba(0, 0, 0, 0.4),
+          inset -14px -14px 22px rgba(255, 255, 255, 0.06), 0 18px 55px rgba(0, 0, 0, 0.28);
+      }
+      .clay .btn {
+        border-color: rgba(255, 255, 255, 0.18);
+        background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
+        box-shadow: inset 10px 10px 18px rgba(0, 0, 0, 0.35),
+          inset -12px -12px 18px rgba(255, 255, 255, 0.05);
+      }
+
+      /* Clay blobs inside hero */
+      .clayOrbs {
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 220px;
+        height: 220px;
+        border-radius: 60px;
+        background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.35), rgba(168, 85, 247, 0.25) 45%, rgba(0, 0, 0, 0) 70%),
+          linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(34, 211, 238, 0.25));
+        filter: blur(0.2px);
+        box-shadow: inset 18px 18px 30px rgba(0, 0, 0, 0.35), inset -16px -16px 26px rgba(255, 255, 255, 0.08),
+          0 30px 80px rgba(0, 0, 0, 0.35);
+        transform: rotate(10deg);
+        transition: transform 0.55s var(--ease);
+      }
+      .clay .hero:hover .clayOrbs {
+        transform: rotate(-6deg) translateY(6px);
+      }
+
+      /* ------------------------------
+         5) Minimalism
+      ------------------------------ */
+      .miniStyle {
+        background: linear-gradient(180deg, #ffffff 0%, #f7f7fb 100%);
+        color: #111;
+        --text: #111;
+        --muted: rgba(17, 17, 17, 0.68);
+      }
+      .miniStyle .nav {
+        background: rgba(255, 255, 255, 0.85);
+        border-color: rgba(0, 0, 0, 0.08);
+      }
+      .miniStyle .pill {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.08);
+      }
+      .miniStyle .hero {
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.1);
+      }
+      .miniStyle .toprow {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        padding-bottom: 14px;
+      }
+      .miniStyle .chip,
+      .miniStyle .mini > div {
+        border-color: rgba(0, 0, 0, 0.08);
+        background: #fff;
+      }
+      .miniStyle .mini > div:hover {
+        box-shadow: 0 18px 55px rgba(0, 0, 0, 0.12);
+      }
+      .miniStyle .btn {
+        background: #111;
+        border-color: #111;
+        color: #fff;
+      }
+      .miniStyle .btn:hover {
+        background: #000;
+      }
+
+      /* Minimal accent line */
+      .line {
+        height: 10px;
+        width: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.1));
+      }
+
+      /* ------------------------------
+         6) Liquid Glass (hyper glossy)
+      ------------------------------ */
+      .liquid {
+        background: radial-gradient(1200px 700px at 25% 25%, rgba(59, 130, 246, 0.55) 0%, transparent 60%),
+          radial-gradient(900px 700px at 80% 65%, rgba(34, 197, 94, 0.45) 0%, transparent 60%),
+          radial-gradient(900px 700px at 55% 85%, rgba(236, 72, 153, 0.5) 0%, transparent 60%),
+          linear-gradient(180deg, #070815 0%, #070815 100%);
+      }
+      .liquid .hero {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(18px) saturate(170%);
+        -webkit-backdrop-filter: blur(18px) saturate(170%);
+      }
+      .liquid .hero::before {
+        content: "";
+        position: absolute;
+        inset: -60px;
+        background: conic-gradient(
+          from 180deg,
+          rgba(59, 130, 246, 0.55),
+          rgba(34, 197, 94, 0.5),
+          rgba(236, 72, 153, 0.5),
+          rgba(59, 130, 246, 0.55)
+        );
+        filter: blur(50px);
+        opacity: 0.35;
+        z-index: -2;
+      }
+      .liquid .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(800px 240px at 30% 10%, rgba(255, 255, 255, 0.35), transparent 60%),
+          radial-gradient(600px 240px at 80% 20%, rgba(255, 255, 255, 0.22), transparent 55%);
+        opacity: 0.7;
+        pointer-events: none;
+        mix-blend-mode: screen;
+      }
+      .liquid .btn {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(236, 72, 153, 0.16));
+        border-color: rgba(255, 255, 255, 0.26);
+      }
+      .liquid .btn:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.32), rgba(236, 72, 153, 0.26));
+      }
+
+      /* Liquid lens element */
+      .lens {
+        position: absolute;
+        left: -60px;
+        bottom: -70px;
+        width: 260px;
+        height: 260px;
+        border-radius: 70px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.03));
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: inset 18px 18px 40px rgba(0, 0, 0, 0.35),
+          inset -18px -18px 40px rgba(255, 255, 255, 0.06), 0 35px 90px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(18px) saturate(180%);
+        -webkit-backdrop-filter: blur(18px) saturate(180%);
+        transform: rotate(-8deg);
+        transition: transform 0.6s var(--ease);
+      }
+      .liquid .hero:hover .lens {
+        transform: rotate(8deg) translateY(-6px);
+      }
+
+      /* Improve section separation */
+      .divider {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+        opacity: 0.6;
+      }
+      .skeuo .divider,
+      .brutal .divider,
+      .miniStyle .divider {
+        background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.12), transparent);
+      }
+
+      /* Accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .hero,
+        .hint,
+        .mouse::after,
+        .mini > div,
+        .btn,
+        .pill,
+        .knob,
+        .clayOrbs,
+        .lens {
+          animation: none !important;
+          transition: none !important;
+        }
+        .hero {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav class="nav" aria-label="Design style navigation">
+        <div class="brand">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Design Style Showcase</span>
+        </div>
+        <div class="links">
+          <a class="pill" href="#glass">Glass</a>
+          <a class="pill" href="#skeuo">Skeuo</a>
+          <a class="pill" href="#brutal">Neo-Brutal</a>
+          <a class="pill" href="#clay">Clay</a>
+          <a class="pill" href="#minimal">Minimal</a>
+          <a class="pill" href="#liquid">Liquid</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- 1) Glassmorphism -->
+    <section id="glass" class="glass" aria-label="Glassmorphism section">
+      <div class="grain" aria-hidden="true"></div>
+
+      <div class="wrap">
+        <div>
+          <p class="kicker">01 • Glassmorphism</p>
+          <h2>Frosted layers, neon glow, and depth that feels weightless.</h2>
+          <p>
+            Transparent surfaces with blur, soft borders, and luminous gradients. Hover around
+            the card for gentle motion that makes the glass feel alive.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn" href="#skeuo">
+              Scroll to Skeuomorphism <span class="arrow" aria-hidden="true"></span>
+            </a>
+            <a class="pill" href="#liquid">Jump to Liquid Glass</a>
+          </div>
+        </div>
+
+        <article class="hero" aria-label="Glass hero card">
+          <div class="toprow">
+            <div class="chips" aria-label="Glass tags">
+              <span class="chip">Blur</span>
+              <span class="chip">Glow</span>
+              <span class="chip">Layered</span>
+            </div>
+            <div
+              style="
+                width: 44px;
+                height: 44px;
+                border-radius: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.22);
+                background: rgba(255, 255, 255, 0.12);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+              "
+              aria-hidden="true"
+              title="Glass tile"
+            ></div>
+          </div>
+
+          <h3 style="margin: 0 0 10px; font-size: 22px; letter-spacing: -0.01em">
+            Aurora Card
+          </h3>
+          <p style="margin: 0 0 16px">
+            A translucent panel that picks up color from the background and keeps content crisp.
+          </p>
+
+          <div class="mini" aria-label="Glass stats">
+            <div>
+              <strong>Clarity</strong>
+              <span>92%</span>
+            </div>
+            <div>
+              <strong>Glow</strong>
+              <span>High</span>
+            </div>
+            <div>
+              <strong>Layers</strong>
+              <span>3</span>
+            </div>
+            <div>
+              <strong>Vibe</strong>
+              <span>Clean</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="hint" aria-hidden="true">
+        <span class="mouse"></span>
+        <span>Scroll</span>
+      </div>
+      <div class="divider" aria-hidden="true"></div>
+    </section>
+
+    <!-- 2) Skeuomorphism -->
+    <section id="skeuo" class="skeuo" aria-label="Skeuomorphism section">
+      <div class="grain" aria-hidden="true" style="opacity: 0.12"></div>
+
+      <div class="wrap">
+        <div>
+          <p class="kicker">02 • Skeuomorphism</p>
+          <h2>Real-world materials, tactile lighting, and satisfying physical cues.</h2>
+          <p>
+            Soft highlights, subtle texture, and dimensional edges that feel touchable. The knob
+            and panels react like hardware.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn" href="#brutal">
+              Scroll to Neobrutalism <span class="arrow" aria-hidden="true"></span>
+            </a>
+            <a class="pill" href="#glass">Back to Glass</a>
+          </div>
+        </div>
+
+        <article class="hero" aria-label="Skeuomorphic hero card">
+          <div class="toprow">
+            <div class="chips" aria-label="Skeuo tags">
+              <span class="chip">Material</span>
+              <span class="chip">Tactile</span>
+              <span class="chip">Shadows</span>
+            </div>
+            <div class="knob" aria-label="Decorative knob"></div>
+          </div>
+
+          <h3 style="margin: 0 0 10px; font-size: 22px; letter-spacing: -0.01em">
+            Desk Panel
+          </h3>
+          <p style="margin: 0 0 16px">
+            A physical-feeling control surface with beveled sections, highlight roll-off, and warm
+            paper-like depth.
+          </p>
+
+          <div class="mini" aria-label="Skeuo tiles">
+            <div>
+              <strong>Finish</strong>
+              <span>Warm</span>
+            </div>
+            <div>
+              <strong>Depth</strong>
+              <span>Bevel</span>
+            </div>
+            <div>
+              <strong>Light</strong>
+              <span>Soft</span>
+            </div>
+            <div>
+              <strong>Feel</strong>
+              <span>Touchy</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+    </section>
+
+    <!-- 3) Neobrutalism -->
+    <section id="brutal" class="brutal" aria-label="Neobrutalism section">
+      <div class="wrap">
+        <div>
+          <p class="kicker" style="color: rgba(17, 17, 17, 0.7)">03 • Neobrutalism</p>
+          <h2>Hard edges, loud color, and unapologetic contrast.</h2>
+          <p style="color: rgba(17, 17, 17, 0.72)">
+            Flat blocks, thick outlines, and shadow offsets that look like stickers slapped onto the
+            screen. Everything is bold, readable, and punchy.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn" href="#clay">
+              Scroll to Claymorphism <span class="arrow" aria-hidden="true"></span>
+            </a>
+            <a class="pill" href="#minimal">Jump to Minimal</a>
+          </div>
+        </div>
+
+        <article class="hero" aria-label="Neobrutal hero card">
+          <div class="toprow">
+            <div class="chips" aria-label="Brutal tags">
+              <span class="chip">Thick Lines</span>
+              <span class="chip">Offset Shadow</span>
+              <span class="chip">Sticker</span>
+            </div>
+            <div
+              style="
+                width: 54px;
+                height: 26px;
+                border: 3px solid #111;
+                border-radius: 12px;
+                background: #fff;
+                box-shadow: 6px 6px 0 #111;
+                transform: rotate(-2deg);
+              "
+              aria-hidden="true"
+              title="Brutal badge"
+            ></div>
+          </div>
+
+          <h3 style="margin: 0 0 10px; font-size: 22px; letter-spacing: -0.01em">
+            Sticker Stack
+          </h3>
+          <p style="margin: 0 0 16px; color: rgba(17, 17, 17, 0.72)">
+            Loud palettes, simple geometry, and deliberate “imperfect” tilt. Hover the tiles for an
+            extra snap.
+          </p>
+
+          <div class="mini" aria-label="Brutal tiles">
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.7)">Outline</strong>
+              <span>4px</span>
+            </div>
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.7)">Shadow</strong>
+              <span>Offset</span>
+            </div>
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.7)">Color</strong>
+              <span>LOUD</span>
+            </div>
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.7)">Type</strong>
+              <span>Bold</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+    </section>
+
+    <!-- 4) Claymorphism -->
+    <section id="clay" class="clay" aria-label="Claymorphism section">
+      <div class="grain" aria-hidden="true"></div>
+
+      <div class="wrap">
+        <div>
+          <p class="kicker">04 • Claymorphism</p>
+          <h2>Soft, inflated shapes with cozy shadows and friendly depth.</h2>
+          <p>
+            Puffy components and gentle highlights that feel molded. Hover for a subtle lift that
+            keeps the clay “squishy”.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn" href="#minimal">
+              Scroll to Minimalism <span class="arrow" aria-hidden="true"></span>
+            </a>
+            <a class="pill" href="#brutal">Back to Neo-Brutal</a>
+          </div>
+        </div>
+
+        <article class="hero" aria-label="Clay hero card">
+          <div class="clayOrbs" aria-hidden="true"></div>
+
+          <div class="toprow">
+            <div class="chips" aria-label="Clay tags">
+              <span class="chip">Puffy</span>
+              <span class="chip">Soft Light</span>
+              <span class="chip">Molded</span>
+            </div>
+            <div
+              style="
+                width: 44px;
+                height: 44px;
+                border-radius: 18px;
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                background: rgba(255, 255, 255, 0.06);
+                box-shadow: inset 10px 10px 18px rgba(0, 0, 0, 0.35),
+                  inset -10px -10px 18px rgba(255, 255, 255, 0.05);
+              "
+              aria-hidden="true"
+              title="Clay tile"
+            ></div>
+          </div>
+
+          <h3 style="margin: 0 0 10px; font-size: 22px; letter-spacing: -0.01em">
+            Puff Panel
+          </h3>
+          <p style="margin: 0 0 16px">
+            Inflated surfaces, soft edges, and “pressed-in” depth that feels warm and playful.
+          </p>
+
+          <div class="mini" aria-label="Clay tiles">
+            <div>
+              <strong>Edge</strong>
+              <span>Round</span>
+            </div>
+            <div>
+              <strong>Shadow</strong>
+              <span>Soft</span>
+            </div>
+            <div>
+              <strong>Depth</strong>
+              <span>Cozy</span>
+            </div>
+            <div>
+              <strong>Vibe</strong>
+              <span>Friendly</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+    </section>
+
+    <!-- 5) Minimalism -->
+    <section id="minimal" class="miniStyle" aria-label="Minimalism section">
+      <div class="wrap">
+        <div>
+          <p class="kicker" style="color: rgba(17, 17, 17, 0.62)">05 • Minimalism</p>
+          <h2>Whitespace, restraint, and typography doing the heavy lifting.</h2>
+          <p style="color: rgba(17, 17, 17, 0.68)">
+            Clean geometry, subtle borders, and a single strong accent. Everything earns its place.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn" href="#liquid">
+              Scroll to Liquid Glass <span class="arrow" aria-hidden="true"></span>
+            </a>
+            <a class="pill" href="#glass">Back to top</a>
+          </div>
+        </div>
+
+        <article class="hero" aria-label="Minimal hero card">
+          <div class="toprow">
+            <div class="chips" aria-label="Minimal tags">
+              <span class="chip" style="background: rgba(0, 0, 0, 0.03)">Type</span>
+              <span class="chip" style="background: rgba(0, 0, 0, 0.03)">Space</span>
+              <span class="chip" style="background: rgba(0, 0, 0, 0.03)">System</span>
+            </div>
+            <div class="line" aria-hidden="true" style="width: 120px"></div>
+          </div>
+
+          <h3 style="margin: 0 0 10px; font-size: 22px; letter-spacing: -0.01em">
+            Quiet Card
+          </h3>
+          <p style="margin: 0 0 16px; color: rgba(17, 17, 17, 0.68)">
+            Minimal styling, maximum clarity. The hover is subtle, because the content is the point.
+          </p>
+
+          <div class="mini" aria-label="Minimal tiles">
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.6)">Focus</strong>
+              <span>High</span>
+            </div>
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.6)">Noise</strong>
+              <span>Low</span>
+            </div>
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.6)">Grid</strong>
+              <span>Clean</span>
+            </div>
+            <div>
+              <strong style="color: rgba(17, 17, 17, 0.6)">Accent</strong>
+              <span>One</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+    </section>
+
+    <!-- 6) Liquid Glass -->
+    <section id="liquid" class="liquid" aria-label="Liquid Glass section">
+      <div class="grain" aria-hidden="true"></div>
+
+      <div class="wrap">
+        <div>
+          <p class="kicker">06 • Liquid Glass</p>
+          <h2>Hyper glossy translucency with lens-like refraction and shine.</h2>
+          <p>
+            This pushes beyond basic glass. Think liquid highlights, prismatic bloom, and surfaces
+            that look like they are bending light.
+          </p>
+
+          <div class="ctaRow">
+            <a class="btn" href="#glass">
+              Back to the top <span class="arrow" aria-hidden="true"></span>
+            </a>
+            <a class="pill" href="#skeuo">Jump to Skeuo</a>
+          </div>
+        </div>
+
+        <article class="hero" aria-label="Liquid glass hero card">
+          <div class="lens" aria-hidden="true"></div>
+
+          <div class="toprow">
+            <div class="chips" aria-label="Liquid tags">
+              <span class="chip">Prism</span>
+              <span class="chip">Lens</span>
+              <span class="chip">Gloss</span>
+            </div>
+            <div
+              style="
+                width: 44px;
+                height: 44px;
+                border-radius: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.22);
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+              "
+              aria-hidden="true"
+              title="Liquid tile"
+            ></div>
+          </div>
+
+          <h3 style="margin: 0 0 10px; font-size: 22px; letter-spacing: -0.01em">
+            Refraction Card
+          </h3>
+          <p style="margin: 0 0 16px">
+            Glossy, translucent, and flooded with highlight bloom. Hover for a subtle lens movement.
+          </p>
+
+          <div class="mini" aria-label="Liquid tiles">
+            <div>
+              <strong>Shine</strong>
+              <span>Ultra</span>
+            </div>
+            <div>
+              <strong>Blur</strong>
+              <span>18px</span>
+            </div>
+            <div>
+              <strong>Bloom</strong>
+              <span>On</span>
+            </div>
+            <div>
+              <strong>Depth</strong>
+              <span>Lens</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="divider" aria-hidden="true"></div>
+    </section>
+  </body>
+</html>
